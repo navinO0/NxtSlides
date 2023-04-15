@@ -18,12 +18,22 @@ class SlidesHomeComponent extends PureComponent {
   }
 
   onClickNewBtn = () => {
-    const {slidesList} = this.state
+    const {slidesList, activeSlide} = this.state
+    const allIds = []
+    slidesList.forEach(each => {
+      allIds.push(each.id)
+    })
+
+    const index = allIds.indexOf(activeSlide)
     const id = v4()
     const heading = 'Heading'
     const description = 'Description'
     const newObj = {id, heading, description}
-    const updatedList = [...slidesList, newObj]
+
+    const firstPart = slidesList.slice(0, index + 1)
+    const secondPart = slidesList.slice(index + 1, slidesList.length)
+    const updatedList = [...firstPart, newObj, ...secondPart]
+
     this.setState({slidesList: updatedList, activeSlide: id})
   }
 
