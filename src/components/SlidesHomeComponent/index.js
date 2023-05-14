@@ -1,12 +1,12 @@
-import {PureComponent} from 'react'
+import {Component} from 'react'
 import {v4} from 'uuid'
 import ListSlideItem from '../ListSlideItem'
 import CurrentSlideComponent from '../CurrentSlideComponent'
 
 import './index.css'
 
-class SlidesHomeComponent extends PureComponent {
-  state = {slidesList: [], activeSlide: ''}
+class SlidesHomeComponent extends Component {
+  state = {slidesList: [], activeSlide: '', activeSlideNum: 1}
 
   componentDidMount() {
     const {initialSlidesList} = this.props
@@ -14,16 +14,22 @@ class SlidesHomeComponent extends PureComponent {
     this.setState({
       slidesList: initialSlidesList,
       activeSlide: initialSlidesList[0].id,
+      activeSlideNum: 1,
     })
   }
 
+  onSetActiveSlideItem = slideNum => {
+    this.setState({activeSlideNum: slideNum})
+  }
+
   onClickNewBtn = () => {
-    const {slidesList, activeSlide} = this.state
+    const {slidesList, activeSlide, activeSlideNum} = this.state
     const allIds = []
+
     slidesList.forEach(each => {
       allIds.push(each.id)
     })
-
+    let counter = 0
     const index = allIds.indexOf(activeSlide)
     const id = v4()
     const heading = 'Heading'
@@ -33,8 +39,16 @@ class SlidesHomeComponent extends PureComponent {
     const firstPart = slidesList.slice(0, index + 1)
     const secondPart = slidesList.slice(index + 1, slidesList.length)
     const updatedList = [...firstPart, newObj, ...secondPart]
-
-    this.setState({slidesList: updatedList, activeSlide: id})
+    const updatedListIds = updatedList.map(eachOne => {
+      const updatedEachOne = {...eachOne, id: counter}
+      counter += 1
+      return updatedEachOne
+    })
+    const IncreactiveSlideNum = index + 1
+    this.setState(
+      {slidesList: updatedListIds, activeSlide: IncreactiveSlideNum},
+      this.onSetActiveSlideItem(index + 1),
+    )
   }
 
   onClickOnSlideEle = id => {
@@ -64,7 +78,7 @@ class SlidesHomeComponent extends PureComponent {
   }
 
   render() {
-    const {slidesList, activeSlide} = this.state
+    const {slidesList, activeSlide, activeSlideNum} = this.state
     const activeSlideItem = slidesList.find(
       eachOne => eachOne.id === activeSlide,
     )
@@ -81,6 +95,7 @@ class SlidesHomeComponent extends PureComponent {
             slideDets={activeSlideItem}
             onChangeHeading={this.onChangeHeading}
             onChangeDescription={this.onChangeDescription}
+            slideNum={activeSlideNum}
           />
         )
       }
@@ -121,6 +136,7 @@ class SlidesHomeComponent extends PureComponent {
                   eachSlide={eachSlide}
                   activeSlide={activeSlide}
                   allIds={allIds}
+                  setSlideNum={this.onSetActiveSlideItem}
                 />
               ))}
             </ol>

@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import './index.css'
 
 const CurrentSlideComponent = props => {
-  const {slideDets, onChangeHeading, onChangeDescription} = props
+  const {slideDets, onChangeHeading, onChangeDescription, slideNum} = props
   const slideOthItem = slideDets
 
   const {id, heading, description} = slideOthItem
@@ -62,6 +62,7 @@ const CurrentSlideComponent = props => {
     return (
       <input
         value={heading}
+        type="text"
         onBlur={onblurHeadingInputElement}
         onChange={onChangeHeadingElement}
         className="heading-input"
@@ -80,6 +81,7 @@ const CurrentSlideComponent = props => {
     return (
       <input
         value={description}
+        type="text"
         onBlur={onblurDescriptionInputElement}
         onChange={onChangeDescriptionElement}
         className="description-input"
@@ -88,7 +90,7 @@ const CurrentSlideComponent = props => {
   }
 
   return (
-    <div className="currentSlide-main-container">
+    <div className="currentSlide-main-container" testid={`slideTab${id + 1}`}>
       {headingElement()}
       {descriptionElement()}
     </div>

@@ -1,18 +1,21 @@
 import './index.css'
 
 const ListSlideItem = props => {
-  const {eachSlide, onClickOnSlideEle, activeSlide, allIds} = props
+  const {eachSlide, onClickOnSlideEle, activeSlide, allIds, setSlideNum} = props
   const {id, heading, description} = eachSlide
   const index = allIds.indexOf(id)
 
   const onClickSlide = () => {
     onClickOnSlideEle(id)
+    const num = index + 1
+    setSlideNum(id)
   }
   const mainContainerClass =
     id === activeSlide ? 'active-item' : 'list-slide-item'
+
   return (
     <li
-      className={`${mainContainerClass}`}
+      className={`backgroundImg ${mainContainerClass}`}
       onClick={onClickSlide}
       testid={`slideTab${index + 1}`}
     >
